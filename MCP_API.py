@@ -1,4 +1,3 @@
-
 import logging
 
 import datetime
@@ -13,7 +12,7 @@ import ssl
 
 
 class McpApiClient(object):
-	"""Wild apricot API client."""
+	"""Master Control Program API client."""
 	auth_endpoint = "https://security.makeict.org/api/login"
 	api_endpoint = "https://security.makeict.org/api"
 
