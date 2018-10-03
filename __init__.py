@@ -11,13 +11,10 @@ import base64
 import ssl
 
 
-class McpApiClient(object):
+class McpApiClient(object, server):
     """Master Control Program API client."""
-    auth_endpoint = "https://security.makeict.org/api/login"
-    api_endpoint = "https://security.makeict.org/api"
-
-    auth_endpoint = "https://192.168.9.10/api/login"
-    api_endpoint = "https://192.168.9.10/api"
+    auth_endpoint = "https://" + server + "/api/login"
+    api_endpoint = "https://" + server + "/api"
 
     session_cookie = None
 
