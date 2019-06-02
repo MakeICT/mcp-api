@@ -5,6 +5,7 @@ import urllib.request
 import urllib.response
 import urllib.error
 import urllib.parse
+from errno import ENETUNREACH
 
 import json
 import base64
@@ -16,13 +17,13 @@ class McpApiClient(object):
     auth_endpoint = "https://security.makeict.org/api/login"
     api_endpoint = "https://security.makeict.org/api"
 
-    auth_endpoint = "https://192.168.9.10/api/login"
-    api_endpoint = "https://192.168.9.10/api"
+    # auth_endpoint = "https://192.168.9.10/api/login"
+    # api_endpoint = "https://192.168.9.10/api"
 
     session_cookie = None
 
     def __init__(self):
-        pass 
+        pass
 
     def authenticate_with_contact_credentials(self, username, password, scope=None):
         """perform authentication by contact credentials and store result for execute_request method
@@ -40,12 +41,24 @@ class McpApiClient(object):
         request.add_header("ContentType", "application/x-www-form-urlencoded")
 
         # print(request.__dict__)
-        response = urllib.request.urlopen(request)
-        # print(response)
-        self.session_cookie = response.headers.get('Set-Cookie')
-        # print(response.headers)
-        # print(self.session_cookie)
-        # print(response.code)
+        try:
+            response = urllib.request.urlopen(request)
+            print("AUTH RESPONSE:")
+            print(response)
+            self.session_cookie = response.headers.get('Set-Cookie')
+            # print(response.headers)
+            # print(self.session_cookie)
+            # print(response.code)
+
+        except urllib.error.URLError:
+            print("URLError")
+
+        except OSError as e:
+            if e.errno == ENETUNREACH:
+                print("Network is unreachable")
+            else:
+                raise e
+
 
     @staticmethod
     def _parse_response(http_response):
